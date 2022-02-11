@@ -1,0 +1,6 @@
+Output:
+  path: "/Users/Desktop/python_lab/output"
+API:
+  coordinate_url: "http://www.geocoding.jp/api/"
+Target_Prefecture:
+  - "東京都"
