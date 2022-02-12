@@ -5,16 +5,11 @@ import yaml
 from traceback import format_exc
 
 from data.InfoExtoractor import InfoExtoractor
+from logger.Log import log
 from imageeditor.ImageEditor import ImageEditor
-
 
 class Main(object):
     """
-    1. Get population for each location.
-    2. Concat population csv with it.
-    3. Get Average of populuation at prefecture.
-    4. Draw circle with red at the place which is apper than average.
-    5. Draw circle with red at the place which is lower than average.
     """
 
     # Contains prefectural office coodinates
@@ -37,8 +32,9 @@ class Main(object):
             api_url = config["API"]["coordinate_url"]
             self.targets = config["Target_Prefecture"]
         except Exception:
-            print(format_exc())
-            print("Failed to import config.")
+            log.error(format_exc())
+            log.error("Failed to import config.")
+            return None
 
         self.extoractor = InfoExtoractor(api_url)
         # print(config)
@@ -54,23 +50,23 @@ class Main(object):
 
         for target in self.targets:
             if target not in self.__supported_names:
-                print(f"{target} is not supported.")
-                print(f"Supported : {self.__supported_names} ")
+                log.critical(f"{target} is not supported.")
+                log.critical(f"Supported : {self.__supported_names} ")
                 return None
 
-            print(f"Start to create image for {target}")
+            log.info(f"Start to create image for {target}")
             info_df = self.extoractor.make_population_df(target)
             if info_df is None or type(info_df) != pandas.DataFrame or info_df.empty:
                 return None
 
             imageeditor = ImageEditor(self.outputpath)
             if not imageeditor.is_initialized():
-                print("Failed to initialized Image Editor.")
+                log.error("Failed to initialized Image Editor.")
                 return None
             _ = imageeditor.make_images(info_df, self.__supported_names[target], target)
             imageeditor = None
 
-        print("Completed.")
+        log.info("Completed.")
 
 
 if __name__ == "__main__":

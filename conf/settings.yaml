@@ -1,5 +1,9 @@
 Output:
-  path: "/Users/Desktop/python_lab/output"
+  path: "/Users/Desktop/python_lab"
+Logging:
+  log_output: "/Users/Desktop/python_lab"
+  # Select from : 0 (DEBUG) or 1 (INFO)
+  log_level: 0
 API:
   coordinate_url: "http://www.geocoding.jp/api/"
 Target_Prefecture:

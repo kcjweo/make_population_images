@@ -1,6 +1,7 @@
 import os
 import pandas
 
+from logger.Log import log
 from pathlib import Path
 from traceback import format_exc
 
@@ -12,7 +13,6 @@ class InfoExtoractor(object):
     """
     def __init__(self,api_url: str) -> None:
 
-        self.__is_initialized = False
         self.api_url = api_url
         self.outputpath = str()
 
@@ -33,7 +33,7 @@ class InfoExtoractor(object):
         root_dir = Path(os.path.dirname(__file__)).parent
         csvpath = os.path.join(root_dir, "constants", csvname)
         if not os.path.exists(csvpath):
-            print(f"{csvpath} doesn't exist.")
+            log.error(f"{csvpath} doesn't exist.")
             return None
 
         try:
@@ -41,11 +41,12 @@ class InfoExtoractor(object):
             locationames = warddf["WardName"].tolist()
             addresses = warddf["Address"].tolist()
         except Exception:
-            print(format_exc())
+            log.error(format_exc())
             return None
 
         if len(locationames) == 0:
-            print(f"Failed to read {csvpath}")
+            log.error(f"Failed to read {csvpath}")
+            return None
 
         infovalues = list()
         for index_num in range(len(addresses)):
@@ -72,6 +73,6 @@ class InfoExtoractor(object):
         if "東京" in key_name:
             csvname = "tokyo_population.csv"
         else:
-            print(f"Name: {key_name} is not supported.")
+            log.error(f"Name: {key_name} is not supported.")
 
         return csvname

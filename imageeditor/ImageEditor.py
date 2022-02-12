@@ -1,8 +1,9 @@
 import os
+import pandas
+
+from logger.Log import log
 from staticmap import StaticMap, CircleMarker
 from traceback import format_exc
-
-import pandas
 
 class ImageEditor(object):
     
@@ -18,12 +19,12 @@ class ImageEditor(object):
         try:
             os.makedirs(self.outputpath, exist_ok=True)
         except Exception:
-            print(format_exc())
-            print(f"Failed to create folder {self.outputpath}")
+            log.error(format_exc())
+            log.error(f"Failed to create folder {self.outputpath}")
             return None
 
         if not os.path.exists(self.outputpath):
-            print(f"Failed to create folder {self.outputpath}")
+            log.error(f"Failed to create folder {self.outputpath}")
             return None
 
         self.__is_initialized = True
@@ -45,7 +46,7 @@ class ImageEditor(object):
             target(str): target prefecture name
 
         """
-        print("Start to make Map.")
+        log.info("Start to make Map.")
 
         if info_df is None or type(info_df) != pandas.DataFrame or info_df.empty:
             return None
@@ -53,7 +54,7 @@ class ImageEditor(object):
 
         basemap = StaticMap(800, 800, url_template='http://a.tile.osm.org/{z}/{x}/{y}.png')
 
-        for index, row in info_df.iterrows():
+        for _, row in info_df.iterrows():
             if row["Population"] >= population_average:
                 color = "red"
             else:
@@ -67,7 +68,7 @@ class ImageEditor(object):
 
         imagename = os.path.join(self.outputpath, target) + ".png"
         image.save((imagename))
-        print(f"Saved Image : {imagename}")
+        log.info(f"Saved Image : {imagename}")
 
         return None
         
