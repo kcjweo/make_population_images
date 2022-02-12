@@ -10,17 +10,11 @@ from imageeditor.ImageEditor import ImageEditor
 
 class Main(object):
     """
-    1. Get population for each location
+    1. Get population for each location.
     2. Concat population csv with it.
-    3. Get Average of populuation at prefecture
-    4.
-    人口数を区ごとに取得する analyzer
-    pandasで結合 controller
-    東京都庁の座標を中心としたOSMを取得する（Zoom11）imageeditor
-    人口の平均値を計算 analyzer
-    区役所ごとにCircleクラスを作成  imageeditor 
-    平均以上を赤、平均以下を青の丸にする imageeditor
-
+    3. Get Average of populuation at prefecture.
+    4. Draw circle with red at the place which is apper than average.
+    5. Draw circle with red at the place which is lower than average.
     """
 
     # Contains prefectural office coodinates
